@@ -1,0 +1,21 @@
+{
+  "name": "sanlam-mrirt-backend",
+  "version": "1.0.0",
+  "description": "Backend reel pour le chatbot de service client de l'agence Sanlam Mrirt",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "better-sqlite3": "^11.3.0",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "ws": "^8.18.0",
+    "dotenv": "^16.4.5",
+    "nodemailer": "^6.9.14"
+  }
+}
