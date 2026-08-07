@@ -9,8 +9,11 @@ const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'data.sqlite');
 
 const db = new Database(DB_PATH);
 
-// Pragmas recommandés pour un usage web (concurrence lecture/écriture correcte)
-db.pragma('journal_mode = WAL');
+// NB: le mode WAL a été retiré volontairement — certains hébergeurs
+// conteneurisés ont un système de fichiers qui ne le supporte pas
+// correctement (erreur "disk I/O error" au démarrage). Le mode par
+// défaut (rollback journal) est plus lent en forte concurrence mais
+// beaucoup plus compatible.
 db.pragma('foreign_keys = ON');
 
 // --- Schéma -------------------------------------------------------------
