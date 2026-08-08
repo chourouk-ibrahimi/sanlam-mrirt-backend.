@@ -16,25 +16,20 @@ const db = new Database(DB_PATH);
 // beaucoup plus compatible.
 db.pragma('foreign_keys = ON');
 
-// --- Schéma -------------------------------------------------------------
-// NB: les tables "tickets" et "users" ci-dessous sont une hypothèse
-// raisonnable d'après le nom du projet (helpdesk/support). À confirmer
-// avec le contenu réel de routes/auth.js et routes/tickets.js.
-
 db.exec(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     email TEXT UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
     name TEXT,
-    role TEXT NOT NULL DEFAULT 'agent', -- 'agent' | 'admin'
+    role TEXT NOT NULL DEFAULT 'agent',
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
   );
 
   CREATE TABLE IF NOT EXISTS tickets (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     subject TEXT NOT NULL,
-    status TEXT NOT NULL DEFAULT 'open', -- 'open' | 'pending' | 'closed'
+    status TEXT NOT NULL DEFAULT 'open',
     client_name TEXT,
     client_email TEXT,
     assigned_agent_id INTEGER REFERENCES users(id),
@@ -42,11 +37,10 @@ db.exec(`
     updated_at TEXT NOT NULL DEFAULT (datetime('now'))
   );
 
-  -- Table confirmée par server.js (utilisée telle quelle dans le WebSocket)
   CREATE TABLE IF NOT EXISTS messages (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     ticket_id INTEGER NOT NULL REFERENCES tickets(id),
-    sender_type TEXT NOT NULL,   -- correspond à msg.role: 'client' | 'agent'
+    sender_type TEXT NOT NULL,
     sender_name TEXT,
     body TEXT NOT NULL,
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
