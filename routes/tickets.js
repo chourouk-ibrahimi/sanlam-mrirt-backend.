@@ -34,6 +34,18 @@ router.post('/', (req, res) => {
   res.status(201).json({ ticket });
 });
 
+// GET /api/tickets/lookup/:id — suivi public d'un ticket par son numéro
+// (accessible sans compte, pour que les clients suivent leur réclamation
+// depuis le chatbot ; ne renvoie que des infos limitées, pas les messages
+// ni les coordonnées du client)
+router.get('/lookup/:id', (req, res) => {
+  const ticket = db
+    .prepare('SELECT id, subject, status, created_at, updated_at FROM tickets WHERE id = ?')
+    .get(req.params.id);
+  if (!ticket) return res.status(404).json({ error: 'Ticket introuvable' });
+  res.json({ ticket });
+});
+
 // GET /api/tickets — liste des tickets (agents uniquement)
 // Filtre optionnel: ?status=open|pending|closed
 router.get('/', requireAuth, (req, res) => {
